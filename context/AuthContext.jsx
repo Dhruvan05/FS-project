@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { api } from '../services/api';
+import { api } from '../services/mockApi'; // Corrected import path
 
 export const AuthContext = createContext(null);
 
@@ -21,13 +21,20 @@ export const AuthProvider = ({ children }) => {
   }, [user]);
 
   const login = async (email, password) => {
-    const res = await api.post('/auth/login', { email, password });
-    if (res && res.accessToken) {
-      api.setToken(res.accessToken);
-      setUser(res.user);
-      return res;
+    setIsLoading(true);
+    try {
+      const res = await api.post('/auth/login', { email, password });
+      if (res && res.accessToken) {
+        api.setToken(res.accessToken);
+        setUser(res.user);
+        return res;
+      }
+      throw new Error(res.error || 'Login failed');
+    } catch (err) {
+      throw err; // Re-throw to be caught by Login component
+    } finally {
+      setIsLoading(false);
     }
-    throw new Error(res.error || 'Login failed');
   };
 
   const logout = () => {
@@ -38,6 +45,7 @@ export const AuthProvider = ({ children }) => {
   const can = (action, resource = {}) => {
     if (!user) return false;
     const perms = {
+      // Corrected keys to match server data ('Admin', 'Editor', 'Viewer')
       Admin: { 'posts:create': true, 'posts:read': true, 'posts:update': true, 'posts:delete': true, 'admin:manageUsers': true },
       Editor: { 'posts:create': true, 'posts:read': true, 'posts:update': 'own', 'posts:delete': 'own' },
       Viewer: { 'posts:read': true },

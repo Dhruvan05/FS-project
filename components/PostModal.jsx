@@ -9,7 +9,8 @@ const PostModal = ({ isOpen, onClose, onSave, post }) => {
   useEffect(() => {
     if (post) {
       setTitle(post.title);
-      setContent(post.content);
+      // Use 'body' to match the server model
+      setContent(post.body);
     } else {
       setTitle('');
       setContent('');

@@ -3,8 +3,9 @@ import { useAuth } from '../hooks/useAuth';
 import { Spinner } from './icons/Spinner';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  // Seeded credentials changed
+  const [username, setUsername] = useState('admin@example.com');
+  const [password, setPassword] = useState('password123');
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { login } = useAuth();
@@ -14,6 +15,7 @@ const Login = () => {
     setError(null);
     setIsSubmitting(true);
     try {
+      // Login now expects email, not username
       await login(username, password);
     } catch (err) {
       setError(err.message || 'Login failed. Please check your credentials.');
@@ -43,15 +45,15 @@ const Login = () => {
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <input
-                id="username"
-                name="username"
-                type="text"
-                autoComplete="username"
+                id="email"
+                name="email"
+                type="text" // Changed from text
+                autoComplete="email"
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 text-gray-900 dark:text-white dark:bg-gray-700 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Username"
+                placeholder="Email address" // Changed placeholder
               />
             </div>
             <div>
@@ -89,26 +91,26 @@ const Login = () => {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
-                Or use test credentials
+                Or use test credentials (pw: password123)
               </span>
             </div>
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-3">
             <button
-              onClick={() => fillCredentials('admin', 'password')}
+              onClick={() => fillCredentials('admin@example.com', 'password123')}
               className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600"
             >
               Admin
             </button>
             <button
-              onClick={() => fillCredentials('editor', 'password')}
+              onClick={() => fillCredentials('editor@example.com', 'password123')}
               className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600"
             >
               Editor
             </button>
             <button
-              onClick={() => fillCredentials('viewer', 'password')}
+              onClick={() => fillCredentials('viewer@example.com', 'password123')}
               className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600"
             >
               Viewer

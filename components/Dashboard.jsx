@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { getPosts, createPost as apiCreatePost, deletePost as apiDeletePost, updatePost as apiUpdatePost } from '../services/mockApi';
+import { api } from '../services/mockApi'; // Corrected import
 import { useAuth } from '../hooks/useAuth';
+import { Role } from '../types'; // Added Role import
 import PostCard from './PostCard';
 import PostModal from './PostModal';
 import { Spinner } from './icons/Spinner';
@@ -16,7 +17,8 @@ const Dashboard = () => {
   const fetchPosts = useCallback(async () => {
     setIsLoading(true);
     try {
-      const fetchedPosts = await getPosts();
+      // Corrected to use api object
+      const fetchedPosts = await api.get('/posts');
       setPosts(fetchedPosts);
     } catch (e) {
       setError(e.message);
@@ -40,12 +42,17 @@ const Dashboard = () => {
   };
 
   const handleDeletePost = async (postId) => {
-    if (window.confirm('Are you sure you want to delete this post?')) {
+    // Replaced window.confirm with a custom modal logic (or remove check)
+    // For this demo, we'll just confirm
+    if (confirm('Are you sure you want to delete this post?')) {
       try {
-        await apiDeletePost(postId);
+        // Corrected to use api object
+        await api.del(`/posts/${postId}`);
         await fetchPosts();
       } catch (e) {
-        alert(e.message);
+        // Replaced alert with console.error
+        console.error(e.message);
+        alert(e.message); // Keeping alert for demo, but console is better
       }
     }
   };
@@ -53,14 +60,17 @@ const Dashboard = () => {
   const handleSavePost = async (title, content) => {
     try {
       if (editingPost) {
-        await apiUpdatePost(editingPost.id, { title, content });
+        // Corrected to use api object
+        await api.put(`/posts/${editingPost.id}`, { title, body: content }); // Use body
       } else {
-        await apiCreatePost({ title, content });
+        // Corrected to use api object
+        await api.post('/posts', { title, body: content }); // Use body
       }
       setIsModalOpen(false);
       await fetchPosts();
     } catch (e) {
-      alert(e.message);
+      console.error(e.message);
+      alert(e.message); // Keeping alert for demo
     }
   };
 
@@ -76,7 +86,8 @@ const Dashboard = () => {
     return <div className="text-center text-red-500 mt-10">{error}</div>;
   }
 
-  const canCreate = user?.role === 'ADMIN' || user?.role === 'EDITOR';
+  // Corrected to use Role enum
+  const canCreate = user?.role === Role.ADMIN || user?.role === Role.EDITOR;
 
   return (
     <div>
@@ -94,7 +105,7 @@ const Dashboard = () => {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => (
           <PostCard
-            key={post.id}
+            key={post.id || post._id} // Handle both id and _id
             post={post}
             onEdit={handleEditPost}
             onDelete={handleDeletePost}

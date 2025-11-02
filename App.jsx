@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Login from './components/Login';
-import Dashboard from './components/Dashboard';
-import AdminPanel from './components/AdminPanel';
-import Header from './components/Header';
-import { useAuth } from './hooks/useAuth';
-import { Spinner } from './components/icons/Spinner';
+import Login from './components/Login.jsx';
+import Dashboard from './components/Dashboard.jsx';
+import AdminPanel from './components/AdminPanel.jsx';
+import Header from './components/Header.jsx';
+import { useAuth } from './hooks/useAuth.js';
+import { Spinner } from './components/icons/Spinner.jsx';
 
 const App = () => {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -34,3 +34,4 @@ const App = () => {
 };
 
 export default App;
+

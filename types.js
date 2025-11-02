@@ -1,8 +1,9 @@
 // Define role constants
 export const Role = {
-  ADMIN: 'ADMIN',
-  EDITOR: 'EDITOR',
-  VIEWER: 'VIEWER',
+  // Corrected to match server/database roles
+  ADMIN: 'Admin',
+  EDITOR: 'Editor',
+  VIEWER: 'Viewer',
 };
 
 // Example user structure (for reference)
@@ -10,7 +11,7 @@ export const Role = {
  * @typedef {Object} User
  * @property {string} id
  * @property {string} username
- * @property {'ADMIN' | 'EDITOR' | 'VIEWER'} role
+ * @property {'Admin' | 'Editor' | 'Viewer'} role // Corrected types
  */
 
 /**

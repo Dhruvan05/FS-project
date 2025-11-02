@@ -43,7 +43,8 @@ const Header = ({ currentPage, setCurrentPage }) => {
           </div>
           <div className="flex items-center">
             <div className="text-gray-300 mr-4">
-              <span className="font-medium">{user?.username}</span>
+              {/* Use user.name to match auth payload */}
+              <span className="font-medium">{user?.name}</span>
               <span
                 className={`ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                   user?.role === Role.ADMIN

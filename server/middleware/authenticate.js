@@ -6,7 +6,14 @@ function authenticate(req, res, next) {
   const token = auth.split(' ')[1];
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret');
-    req.user = { id: payload.sub, role: payload.role };
+    
+    // Add all relevant fields from token to req.user
+    req.user = { 
+      id: payload.sub, 
+      role: payload.role, 
+      username: payload.username // Added username
+    };
+
     next();
   } catch (err) {
     return res.status(401).json({ error: 'Invalid token' });

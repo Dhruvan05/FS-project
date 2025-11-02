@@ -10,7 +10,14 @@ router.post('/login', async (req, res) => {
   if (!u) return res.status(401).json({ error: 'Invalid creds' });
   const ok = await bcrypt.compare(password, u.passwordHash);
   if (!ok) return res.status(401).json({ error: 'Invalid creds' });
-  const token = jwt.sign({ sub: String(u._id), role: u.role }, process.env.JWT_SECRET || 'dev_secret', { expiresIn: '1h' });
+
+  // Add username (u.name) to the JWT payload
+  const token = jwt.sign(
+    { sub: String(u._id), role: u.role, username: u.name }, // Added username
+    process.env.JWT_SECRET || 'dev_secret', 
+    { expiresIn: '1h' }
+  );
+
   res.json({ accessToken: token, user: { id: u._id, name: u.name, role: u.role, email: u.email } });
 });
 

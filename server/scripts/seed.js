@@ -9,6 +9,7 @@ async function seed() {
   await User.deleteMany({});
   await Post.deleteMany({});
   const pw = await bcrypt.hash('password123', 10);
+  
   const admin = new User({ name: 'Admin User', email: 'admin@example.com', passwordHash: pw, role: 'Admin' });
   const editor = new User({ name: 'Editor User', email: 'editor@example.com', passwordHash: pw, role: 'Editor' });
   const viewer = new User({ name: 'Viewer User', email: 'viewer@example.com', passwordHash: pw, role: 'Viewer' });
@@ -16,10 +17,20 @@ async function seed() {
   await editor.save();
   await viewer.save();
 
-  await Post.create({ title: 'Admin post', body: 'By admin', authorId: admin._id });
-  await Post.create({ title: 'Editor post', body: 'By editor', authorId: editor._id });
+  await Post.create({ 
+    title: 'Admin post', 
+    body: 'By admin', 
+    authorId: admin._id, 
+    authorUsername: admin.name // Added authorUsername
+  });
+  await Post.create({ 
+    title: 'Editor post', 
+    body: 'By editor', 
+    authorId: editor._id,
+    authorUsername: editor.name // Added authorUsername
+  });
 
-  console.log('Seed complete. Users: admin/editor/viewer (password: password123)');
+  console.log('Seed complete. Users: admin@example.com, editor@example.com, viewer@example.com (password: password123)');
   process.exit(0);
 }
 

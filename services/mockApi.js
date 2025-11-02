@@ -20,7 +20,7 @@ function buildHeaders(extra = {}) {
 }
 
 async function request(path, opts = {}) {
-  const res = await fetch('/api' + path, {
+  const res = await fetch('/api' + path, { // Will be proxied by Vite
     method: opts.method || 'GET',
     headers: buildHeaders(opts.headers),
     body: opts.body ? JSON.stringify(opts.body) : undefined,
@@ -29,7 +29,11 @@ async function request(path, opts = {}) {
 
   const text = await res.text();
   let payload = null;
+  
+  if (res.status === 204) return null; // Handle No Content for DELETE
+
   try { payload = JSON.parse(text); } catch { payload = text; }
+  
   if (!res.ok) {
     const message = (payload && payload.error) || res.statusText || 'Request failed';
     throw new Error(message);
