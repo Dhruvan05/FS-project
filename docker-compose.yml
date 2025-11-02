@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:6
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  api:
+    build: ./server
+    restart: unless-stopped
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/rbac_demo
+      - JWT_SECRET=supersecret_dev_key
+      - PORT=4000
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:

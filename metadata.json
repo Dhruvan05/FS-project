@@ -1,0 +1,5 @@
+
+{
+  "name": "RBAC Dashboard",
+  "description": "A demonstration of a fine-grained Role-Based Access Control (RBAC) system in a React application. It showcases how different user roles (Admin, Editor, Viewer) have varying permissions to view, create, edit, and manage content and users, with a mock backend simulating API enforcement."
+}
