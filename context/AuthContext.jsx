@@ -12,6 +12,8 @@ export const AuthProvider = ({ children }) => {
       return null;
     }
   });
+  // This isLoading is now only for the initial page load check (if you add one)
+  // not for the login action itself.
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export const AuthProvider = ({ children }) => {
   }, [user]);
 
   const login = async (email, password) => {
-    setIsLoading(true);
+    // setIsLoading(true); // <-- REMOVED
     try {
       const res = await api.post('/auth/login', { email, password });
       if (res && res.accessToken) {
@@ -32,9 +34,10 @@ export const AuthProvider = ({ children }) => {
       throw new Error(res.error || 'Login failed');
     } catch (err) {
       throw err; // Re-throw to be caught by Login component
-    } finally {
-      setIsLoading(false);
-    }
+    } 
+    // finally {
+    //   setIsLoading(false); // <-- REMOVED
+    // }
   };
 
   const logout = () => {
@@ -67,3 +70,4 @@ export const AuthProvider = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
